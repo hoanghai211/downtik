@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import Head from 'next/head'
-import Navbar from '@/components/Navbar'
+import Layout from '@/components/Layout'
 import Hero from '@/components/Hero'
 import DownloaderForm from '@/components/DownloaderForm'
 import ResultsCard from '@/components/ResultsCard'
 import Features from '@/components/Features'
-import Footer from '@/components/Footer'
 
 export default function Home() {
   const [videoData, setVideoData] = useState(null)
@@ -44,44 +42,28 @@ export default function Home() {
   }
 
   return (
-    <>
-      <Head>
-        <title>TikSave Pro | Premium TikTok Video Downloader</title>
-        <meta name="description" content="Download TikTok videos without watermark in HD quality" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-      </Head>
+    <Layout>
+      <Hero />
       
-      <div className="min-h-screen flex flex-col">
-        <Navbar />
-        
-        <main className="flex-grow">
-          <Hero />
-          
-          <section className="py-16 bg-dark-950">
-            <div className="container mx-auto px-4">
-              <DownloaderForm 
-                onSubmit={handleSubmit} 
-                isLoading={isLoading} 
-                error={error}
-              />
-            </div>
-          </section>
-          
-          <section id="results-section" className="py-16">
-            <div className="container mx-auto px-4">
-              {videoData && (
-                <ResultsCard videoData={videoData} />
-              )}
-            </div>
-          </section>
-          
-          <Features />
-        </main>
-        
-        <Footer />
-      </div>
-    </>
+      <section className="py-16 bg-dark-950">
+        <div className="container mx-auto px-4">
+          <DownloaderForm 
+            onSubmit={handleSubmit} 
+            isLoading={isLoading} 
+            error={error}
+          />
+        </div>
+      </section>
+      
+      <section id="results-section" className="py-16">
+        <div className="container mx-auto px-4">
+          {videoData && (
+            <ResultsCard videoData={videoData} />
+          )}
+        </div>
+      </section>
+      
+      <Features />
+    </Layout>
   )
 }

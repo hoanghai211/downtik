@@ -21,26 +21,38 @@ export default function Footer() {
             </p>
             <div className="flex gap-4">
               <a 
-                href="#" 
+                href="https://facebook.com" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary-900 hover:text-primary-100 transition-colors"
+                aria-label="Facebook"
               >
                 <i className="fab fa-facebook-f"></i>
               </a>
               <a 
-                href="#" 
+                href="https://twitter.com" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary-900 hover:text-primary-100 transition-colors"
+                aria-label="Twitter"
               >
                 <i className="fab fa-twitter"></i>
               </a>
               <a 
-                href="#" 
+                href="https://instagram.com" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary-900 hover:text-primary-100 transition-colors"
+                aria-label="Instagram"
               >
                 <i className="fab fa-instagram"></i>
               </a>
               <a 
-                href="#" 
+                href="https://youtube.com" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 hover:bg-primary-900 hover:text-primary-100 transition-colors"
+                aria-label="YouTube"
               >
                 <i className="fab fa-youtube"></i>
               </a>
@@ -57,18 +69,23 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#features" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/features" className="text-slate-400 text-sm hover:text-white transition-colors">
                   Features
                 </Link>
               </li>
               <li>
-                <Link href="#how-it-works" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/how-it-works" className="text-slate-400 text-sm hover:text-white transition-colors">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="#faq" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/faq" className="text-slate-400 text-sm hover:text-white transition-colors">
                   FAQ
+                </Link>
+              </li>
+              <li>
+                <Link href="/pricing" className="text-slate-400 text-sm hover:text-white transition-colors">
+                  Pricing
                 </Link>
               </li>
             </ul>
@@ -79,22 +96,22 @@ export default function Footer() {
             <h3 className="font-bold text-white mb-4">Legal</h3>
             <ul className="flex flex-col gap-2">
               <li>
-                <Link href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/privacy-policy" className="text-slate-400 text-sm hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/terms-of-service" className="text-slate-400 text-sm hover:text-white transition-colors">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/dmca" className="text-slate-400 text-sm hover:text-white transition-colors">
                   DMCA
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/contact-us" className="text-slate-400 text-sm hover:text-white transition-colors">
                   Contact Us
                 </Link>
               </li>
@@ -106,22 +123,22 @@ export default function Footer() {
             <h3 className="font-bold text-white mb-4">Support</h3>
             <ul className="flex flex-col gap-2">
               <li>
-                <Link href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/help-center" className="text-slate-400 text-sm hover:text-white transition-colors">
                   Help Center
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/community" className="text-slate-400 text-sm hover:text-white transition-colors">
                   Community
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/feedback" className="text-slate-400 text-sm hover:text-white transition-colors">
                   Feedback
                 </Link>
               </li>
               <li>
-                <Link href="#" className="text-slate-400 text-sm hover:text-white transition-colors">
+                <Link href="/report-bug" className="text-slate-400 text-sm hover:text-white transition-colors">
                   Report Bug
                 </Link>
               </li>
