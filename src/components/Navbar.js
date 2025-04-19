@@ -177,102 +177,153 @@ export default function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden bg-dark-900 border-b border-slate-800 py-4">
           <div className="container mx-auto px-4 flex flex-col gap-2">
+            <div className="flex items-center justify-between px-4 py-2 mb-2">
+              <div className="text-sm font-semibold text-slate-300">Menu</div>
+              <button
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-1 rounded-full hover:bg-slate-800 text-slate-400"
+              >
+                <XMarkIcon className="h-5 w-5" />
+              </button>
+            </div>
+            
             <Link
               href="/"
-              className={`block px-4 py-2 text-sm font-medium ${isActive('/') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+              className={`block px-4 py-2.5 text-sm font-medium ${isActive('/') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Home
             </Link>
             <Link
               href="/features"
-              className={`block px-4 py-2 text-sm font-medium ${isActive('/features') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+              className={`block px-4 py-2.5 text-sm font-medium ${isActive('/features') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
               onClick={() => setMobileMenuOpen(false)}
             >
               Features
             </Link>
             <Link
               href="/how-it-works"
-              className={`block px-4 py-2 text-sm font-medium ${isActive('/how-it-works') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+              className={`block px-4 py-2.5 text-sm font-medium ${isActive('/how-it-works') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
               onClick={() => setMobileMenuOpen(false)}
             >
               How It Works
             </Link>
             <Link
               href="/faq"
-              className={`block px-4 py-2 text-sm font-medium ${isActive('/faq') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+              className={`block px-4 py-2.5 text-sm font-medium ${isActive('/faq') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
               onClick={() => setMobileMenuOpen(false)}
             >
               FAQ
             </Link>
+            <Link
+              href="/pricing"
+              className={`block px-4 py-2.5 text-sm font-medium ${isActive('/pricing') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Pricing
+            </Link>
             
-            {/* Legal section - mobile */}
+            {/* Legal section - collapsible */}
             <div className="border-t border-slate-800/50 mt-2 pt-2">
-              <div className="px-4 py-2 text-sm font-medium text-slate-400">Legal</div>
-              <Link
-                href="/privacy-policy"
-                className={`block px-4 py-2 text-sm font-medium ${isActive('/privacy-policy') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md ml-2`}
-                onClick={() => setMobileMenuOpen(false)}
+              <button 
+                className="w-full px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-800/50 hover:text-white rounded-md flex items-center justify-between"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setLegalDropdownOpen(!legalDropdownOpen);
+                }}
               >
-                Privacy Policy
-              </Link>
-              <Link
-                href="/terms-of-service"
-                className={`block px-4 py-2 text-sm font-medium ${isActive('/terms-of-service') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md ml-2`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Terms of Service
-              </Link>
-              <Link
-                href="/dmca"
-                className={`block px-4 py-2 text-sm font-medium ${isActive('/dmca') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md ml-2`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                DMCA
-              </Link>
-              <Link
-                href="/contact-us"
-                className={`block px-4 py-2 text-sm font-medium ${isActive('/contact-us') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md ml-2`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Contact Us
-              </Link>
+                <span>Legal</span>
+                <ChevronDownIcon 
+                  className={`h-4 w-4 transition-transform ${legalDropdownOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+              
+              {legalDropdownOpen && (
+                <div className="pl-4 mt-1 space-y-1">
+                  <Link
+                    href="/privacy-policy"
+                    className={`block px-4 py-2 text-sm font-medium ${isActive('/privacy-policy') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Privacy Policy
+                  </Link>
+                  <Link
+                    href="/terms-of-service"
+                    className={`block px-4 py-2 text-sm font-medium ${isActive('/terms-of-service') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Terms of Service
+                  </Link>
+                  <Link
+                    href="/dmca"
+                    className={`block px-4 py-2 text-sm font-medium ${isActive('/dmca') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    DMCA
+                  </Link>
+                  <Link
+                    href="/contact-us"
+                    className={`block px-4 py-2 text-sm font-medium ${isActive('/contact-us') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Contact Us
+                  </Link>
+                </div>
+              )}
             </div>
             
-            {/* Support section - mobile */}
+            {/* Support section - collapsible */}
             <div className="border-t border-slate-800/50 mt-2 pt-2">
-              <div className="px-4 py-2 text-sm font-medium text-slate-400">Support</div>
-              <Link
-                href="/help-center"
-                className={`block px-4 py-2 text-sm font-medium ${isActive('/help-center') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md ml-2`}
-                onClick={() => setMobileMenuOpen(false)}
+              <button 
+                className="w-full px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-800/50 hover:text-white rounded-md flex items-center justify-between"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setSupportDropdownOpen(!supportDropdownOpen);
+                }}
               >
-                Help Center
-              </Link>
-              <Link
-                href="/community"
-                className={`block px-4 py-2 text-sm font-medium ${isActive('/community') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md ml-2`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Community
-              </Link>
-              <Link
-                href="/feedback"
-                className={`block px-4 py-2 text-sm font-medium ${isActive('/feedback') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md ml-2`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Feedback
-              </Link>
-              <Link
-                href="/report-bug"
-                className={`block px-4 py-2 text-sm font-medium ${isActive('/report-bug') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md ml-2`}
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Report Bug
-              </Link>
+                <span>Support</span>
+                <ChevronDownIcon 
+                  className={`h-4 w-4 transition-transform ${supportDropdownOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+              
+              {supportDropdownOpen && (
+                <div className="pl-4 mt-1 space-y-1">
+                  <Link
+                    href="/help-center"
+                    className={`block px-4 py-2 text-sm font-medium ${isActive('/help-center') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Help Center
+                  </Link>
+                  <Link
+                    href="/community"
+                    className={`block px-4 py-2 text-sm font-medium ${isActive('/community') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Community
+                  </Link>
+                  <Link
+                    href="/feedback"
+                    className={`block px-4 py-2 text-sm font-medium ${isActive('/feedback') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Feedback
+                  </Link>
+                  <Link
+                    href="/report-bug"
+                    className={`block px-4 py-2 text-sm font-medium ${isActive('/report-bug') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Report Bug
+                  </Link>
+                </div>
+              )}
             </div>
             
-            <div className="pt-2 pb-1">
+            <div className="border-t border-slate-800/50 mt-3 pt-3 pb-1">
               <Link 
                 href="/pricing"
                 className="w-full btn btn-primary rounded-full text-sm px-5 py-2.5 font-semibold shadow-lg flex items-center justify-center gap-2"
