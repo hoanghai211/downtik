@@ -1,13 +1,15 @@
-// Ultra-simple Express server for TikTok downloader - Fixed version
+// Ultra-simple Express server for TikTok downloader - ES Module version
 import express from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import cors from 'cors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Create Express app
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 // Logging middleware
@@ -59,10 +61,178 @@ app.post('/api/download', (req, res) => {
   }
 });
 
-// Only serve the API, no static files or catch-all route to avoid path-to-regexp errors
+// Also serve static files for the frontend
+app.use(express.static(path.join(__dirname, 'client')));
+
+// Handle main.tsx request by serving a simple JavaScript file
+app.get('/src/main.tsx', (req, res) => {
+  // This is a simplified approach - in a real app, you'd use proper bundling
+  res.type('application/javascript');
+  res.send(`
+    // Simple JavaScript replacement for main.tsx
+    document.getElementById('root').innerHTML = \`
+      <div style="font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 2rem;">
+        <h1 style="color: #ff0050; font-size: 2.5rem; text-align: center; margin-bottom: 2rem;">
+          TikTok Video Downloader
+        </h1>
+        
+        <div style="background: linear-gradient(135deg, #ff0050, #00f2ea); padding: 2px; border-radius: 8px; margin-bottom: 2rem;">
+          <div style="background: #111; border-radius: 6px; padding: 2rem;">
+            <h2 style="color: white; margin-bottom: 1rem; font-size: 1.5rem;">Enter TikTok URL</h2>
+            
+            <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+              <input 
+                id="tiktok-url" 
+                type="text" 
+                placeholder="Paste TikTok URL here..." 
+                style="flex: 1; padding: 0.75rem; border-radius: 4px; border: none; background: #222; color: white;"
+              />
+              <button 
+                id="download-btn"
+                style="background: linear-gradient(90deg, #ff0050, #00f2ea); color: white; font-weight: bold; padding: 0.75rem 1.5rem; border: none; border-radius: 4px; cursor: pointer;"
+              >
+                Download
+              </button>
+            </div>
+            
+            <div id="error-message" style="color: #ff0050; margin-top: 1rem; display: none;"></div>
+          </div>
+        </div>
+        
+        <div id="result-container" style="display: none; background: #111; border-radius: 8px; padding: 2rem; margin-bottom: 2rem;">
+          <h2 style="color: white; margin-bottom: 1rem; font-size: 1.5rem;">Download Result</h2>
+          <div id="video-result" style="display: flex; gap: 2rem; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px;">
+              <img id="video-thumbnail" style="width: 100%; border-radius: 8px;" />
+            </div>
+            <div style="flex: 2; min-width: 300px; color: white;">
+              <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <img id="user-avatar" style="width: 40px; height: 40px; border-radius: 50%; margin-right: 1rem;" />
+                <span id="username" style="font-weight: bold;"></span>
+              </div>
+              
+              <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-bottom: 1.5rem;">
+                <div>
+                  <div style="color: #666;">Views</div>
+                  <div id="views" style="font-weight: bold;"></div>
+                </div>
+                <div>
+                  <div style="color: #666;">Comments</div>
+                  <div id="comments" style="font-weight: bold;"></div>
+                </div>
+                <div>
+                  <div style="color: #666;">Shares</div>
+                  <div id="shares" style="font-weight: bold;"></div>
+                </div>
+                <div>
+                  <div style="color: #666;">Downloads</div>
+                  <div id="downloads" style="font-weight: bold;"></div>
+                </div>
+              </div>
+              
+              <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a id="video-download" target="_blank" style="background: linear-gradient(90deg, #ff0050, #8e2de2); color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 4px; font-weight: bold;">
+                  Download Video
+                </a>
+                <a id="audio-download" target="_blank" style="background: linear-gradient(90deg, #00f2ea, #4facfe); color: white; text-decoration: none; padding: 0.75rem 1.5rem; border-radius: 4px; font-weight: bold;">
+                  Download Audio
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    \`;
+    
+    // Simple JavaScript to handle the form submission
+    document.getElementById('download-btn').addEventListener('click', function() {
+      const url = document.getElementById('tiktok-url').value;
+      const errorElem = document.getElementById('error-message');
+      
+      if (!url) {
+        errorElem.textContent = "Please enter a TikTok URL";
+        errorElem.style.display = "block";
+        return;
+      }
+      
+      if (!url.includes('tiktok.com')) {
+        errorElem.textContent = "Not a valid TikTok URL";
+        errorElem.style.display = "block";
+        return;
+      }
+      
+      errorElem.style.display = "none";
+      document.getElementById('download-btn').textContent = "Processing...";
+      
+      fetch('/api/download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ url })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          errorElem.textContent = data.error;
+          errorElem.style.display = "block";
+          return;
+        }
+        
+        // Display result
+        document.getElementById('result-container').style.display = "block";
+        document.getElementById('username').textContent = data.username || "@user";
+        document.getElementById('user-avatar').src = data.avatar || "https://via.placeholder.com/40";
+        document.getElementById('video-thumbnail').src = data.thumbnail || "https://via.placeholder.com/300x500";
+        document.getElementById('views').textContent = data.stats?.views || "0";
+        document.getElementById('comments').textContent = data.stats?.comments || "0";
+        document.getElementById('shares').textContent = data.stats?.shares || "0"; 
+        document.getElementById('downloads').textContent = data.stats?.downloads || "0";
+        document.getElementById('video-download').href = data.video_url || "#";
+        document.getElementById('audio-download').href = data.audio_url || "#";
+      })
+      .catch(err => {
+        errorElem.textContent = "Error processing request: " + err.message;
+        errorElem.style.display = "block";
+      })
+      .finally(() => {
+        document.getElementById('download-btn').textContent = "Download";
+      });
+    });
+  `);
+});
+
+// Add basic path routes - avoiding pattern matching to prevent path-to-regexp errors
+app.get('/', (req, res) => {
+  // Modified index.html that works with our simplified JS approach
+  res.send(`
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+        <title>TikTok Video Downloader</title>
+        <style>
+          body {
+            margin: 0;
+            background-color: #000;
+            color: white;
+            font-family: Arial, sans-serif;
+          }
+        </style>
+      </head>
+      <body>
+        <div id="root"></div>
+        <script src="/src/main.tsx"></script>
+      </body>
+    </html>
+  `);
+});
 
 // Start server
 const port = 5000;
 app.listen(port, '0.0.0.0', () => {
-  console.log(`Ultra simple API-only server running on port ${port}`);
+  console.log(`Ultra simple server running on port ${port}`);
+  console.log(`API available at http://localhost:${port}/api`);
+  console.log(`Frontend available at http://localhost:${port}`);
 });
