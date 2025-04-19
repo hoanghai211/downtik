@@ -1,19 +1,33 @@
 // Ultra-minimal Express server with no complex route patterns
 const express = require('express');
 const cors = require('cors');
+const axios = require('axios');
+const FormData = require('form-data');
 
 // Create Express app
 const app = express();
 
 // Essential middleware only
 app.use(express.json());
+app.use(cors());
+
+// Helper function to extract data between two strings (like PHP's get_between)
+function getBetween(string, start, end) {
+  const startPos = string.indexOf(start);
+  if (startPos === -1) return null;
+  
+  const endPos = string.indexOf(end, startPos + start.length);
+  if (endPos === -1) return null;
+  
+  return string.substring(startPos + start.length, endPos).trim();
+}
 
 // Fixed API routes
 app.get("/api/ping", (req, res) => {
   res.json({ message: "Server is running!" });
 });
 
-app.post("/api/download", (req, res) => {
+app.post("/api/download", async (req, res) => {
   try {
     const { url } = req.body;
     
@@ -25,33 +39,85 @@ app.post("/api/download", (req, res) => {
       return res.status(400).json({ error: "Not a valid TikTok URL" });
     }
     
-    // Extract username if possible
-    const urlParts = url.split('/');
-    let username = "@tiktok_user";
+    console.log(`Processing TikTok URL: ${url}`);
     
-    for (let i = 0; i < urlParts.length; i++) {
-      if (urlParts[i].startsWith('@')) {
-        username = urlParts[i];
-        break;
+    try {
+      // Create form data
+      const formData = new FormData();
+      formData.append('video-full-url', url);
+      
+      // Make request to savetikk.com
+      const response = await axios({
+        method: 'post',
+        url: 'https://savetikk.com/profile.php',
+        headers: {
+          'Origin': 'https://savetikk.com',
+          'Referer': 'https://savetikk.com/ja',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+          'X-Requested-With': 'XMLHttpRequest',
+          ...formData.getHeaders()
+        },
+        data: formData
+      });
+      
+      // Log response status
+      console.log(`Response received with status: ${response.status}`);
+      
+      // Extract data from HTML
+      const html = response.data;
+      
+      const video_url_path = getBetween(html, 'href="api.php?url=', '&hd=1">Without Watermark');
+      const video_url = video_url_path ? `https://savetikk.com/api.php?url=${video_url_path}&hd=1` : null;
+      
+      const audio_url_path = getBetween(html, 'href="', '.mp3&hd=1">Download MP3</a>');
+      const audio_url = audio_url_path ? `${audio_url_path}.mp3&hd=1` : null;
+      
+      const thumb = getBetween(html, "background-image: url('", "');");
+      const avatar = getBetween(html, '<img class="result_author" src="', '" alt=');
+      const username = getBetween(html, '<h2 class="maintext">', '</h2>');
+      
+      const views = getBetween(html, '<div class="icon-result icon-play"><i class="icon play-icon"></i><span>', '</span>');
+      const comments = getBetween(html, '<div class="icon-result icon-comment"><i class="icon comment-icon"></i><span>', '</span>');
+      const shares = getBetween(html, '<div class="icon-result icon-share"><i class="icon share-icon"></i><span>', '</span>');
+      const downloads = getBetween(html, '<div class="icon-result icon-download"><i class="icon download-icon"></i><span>', '</span>');
+      
+      // Create response object
+      const result = {
+        username: username || '@unknown',
+        avatar: avatar || 'https://placehold.co/100x100',
+        thumbnail: thumb || 'https://placehold.co/300x400',
+        video_url: video_url,
+        audio_url: audio_url,
+        stats: {
+          views: views || '0',
+          comments: comments || '0',
+          shares: shares || '0',
+          downloads: downloads || '0'
+        }
+      };
+      
+      console.log('Successfully processed TikTok video');
+      return res.status(200).json(result);
+    } catch (apiError) {
+      console.error("API error:", apiError.message);
+      
+      // Extract username if possible for fallback response
+      const urlParts = url.split('/');
+      let username = "@tiktok_user";
+      
+      for (let i = 0; i < urlParts.length; i++) {
+        if (urlParts[i].startsWith('@')) {
+          username = urlParts[i];
+          break;
+        }
       }
+      
+      // If the service failed, return an error
+      return res.status(500).json({ 
+        error: "Failed to process TikTok video. The download service might be unavailable.", 
+        details: apiError.message 
+      });
     }
-    
-    // Simple mock response
-    const mockResponse = {
-      username: username,
-      avatar: "https://p16-sign-va.tiktokcdn.com/musically-maliva-obj/1654721415359490~c5_100x100.jpeg",
-      thumbnail: "https://p16-sign-va.tiktokcdn.com/obj/tos-maliva-p-0068/oAKgkpbiPbzFvfNQCNzDjnIeD0KAezrgxkLiMd",
-      video_url: "https://api.example.com/download/no-watermark-video.mp4",
-      audio_url: "https://api.example.com/download/audio.mp3",
-      stats: {
-        views: "1.5M",
-        comments: "10.2K",
-        shares: "5.4K", 
-        downloads: "2.1K"
-      }
-    };
-    
-    return res.status(200).json(mockResponse);
   } catch (error) {
     console.error("Error processing request:", error);
     return res.status(500).json({ error: "Failed to process TikTok video" });
