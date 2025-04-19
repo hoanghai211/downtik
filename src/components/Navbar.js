@@ -59,9 +59,9 @@ export default function Navbar() {
               </Link>
               
               {/* Legal Dropdown */}
-              <div className="relative group">
+              <div className="relative group z-20">
                 <button 
-                  className="flex items-center gap-1 text-sm font-medium text-slate-300 hover:text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 group-hover:after:w-full after:bg-gradient-to-r from-primary to-primary-700 after:transition-all"
+                  className="flex items-center gap-1 text-sm font-medium text-slate-300 hover:text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 group-hover:after:w-full after:bg-gradient-to-r from-primary to-primary-700 after:transition-all cursor-pointer"
                   onClick={() => setLegalDropdownOpen(!legalDropdownOpen)}
                   onMouseEnter={() => setLegalDropdownOpen(true)}
                   onMouseLeave={() => setLegalDropdownOpen(false)}
@@ -72,7 +72,7 @@ export default function Navbar() {
                 
                 {/* Legal Dropdown Menu */}
                 <div 
-                  className={`absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-dark-800 ring-1 ring-black ring-opacity-5 transition-opacity duration-150 ${legalDropdownOpen ? 'opacity-100' : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible'}`}
+                  className={`absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-dark-800 ring-1 ring-black ring-opacity-5 transition-all duration-200 z-20 ${legalDropdownOpen ? 'opacity-100 transform-none' : 'opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto'}`}
                   onMouseEnter={() => setLegalDropdownOpen(true)}
                   onMouseLeave={() => setLegalDropdownOpen(false)}
                 >
@@ -106,9 +106,9 @@ export default function Navbar() {
               </div>
               
               {/* Support Dropdown */}
-              <div className="relative group">
+              <div className="relative group z-20">
                 <button 
-                  className="flex items-center gap-1 text-sm font-medium text-slate-300 hover:text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 group-hover:after:w-full after:bg-gradient-to-r from-primary to-primary-700 after:transition-all"
+                  className="flex items-center gap-1 text-sm font-medium text-slate-300 hover:text-white relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 group-hover:after:w-full after:bg-gradient-to-r from-primary to-primary-700 after:transition-all cursor-pointer"
                   onClick={() => setSupportDropdownOpen(!supportDropdownOpen)}
                   onMouseEnter={() => setSupportDropdownOpen(true)}
                   onMouseLeave={() => setSupportDropdownOpen(false)}
@@ -119,7 +119,7 @@ export default function Navbar() {
                 
                 {/* Support Dropdown Menu */}
                 <div 
-                  className={`absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-dark-800 ring-1 ring-black ring-opacity-5 transition-opacity duration-150 ${supportDropdownOpen ? 'opacity-100' : 'opacity-0 invisible group-hover:opacity-100 group-hover:visible'}`}
+                  className={`absolute left-0 mt-1 w-48 rounded-md shadow-lg bg-dark-800 ring-1 ring-black ring-opacity-5 transition-all duration-200 z-20 ${supportDropdownOpen ? 'opacity-100 transform-none' : 'opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto'}`}
                   onMouseEnter={() => setSupportDropdownOpen(true)}
                   onMouseLeave={() => setSupportDropdownOpen(false)}
                 >
@@ -224,14 +224,10 @@ export default function Navbar() {
             </Link>
             
             {/* Legal section - collapsible */}
-            <div className="border-t border-slate-800/50 mt-2 pt-2">
+            <div className="border-t border-slate-800/50 mt-2 pt-2 z-10">
               <button 
-                className="w-full px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-800/50 hover:text-white rounded-md flex items-center justify-between"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setLegalDropdownOpen(!legalDropdownOpen);
-                }}
+                className="w-full px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-800/50 hover:text-white rounded-md flex items-center justify-between cursor-pointer"
+                onClick={() => setLegalDropdownOpen(!legalDropdownOpen)}
               >
                 <span>Legal</span>
                 <ChevronDownIcon 
@@ -239,49 +235,45 @@ export default function Navbar() {
                 />
               </button>
               
-              {legalDropdownOpen && (
-                <div className="pl-4 mt-1 space-y-1">
-                  <Link
-                    href="/privacy-policy"
-                    className={`block px-4 py-2 text-sm font-medium ${isActive('/privacy-policy') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Privacy Policy
-                  </Link>
-                  <Link
-                    href="/terms-of-service"
-                    className={`block px-4 py-2 text-sm font-medium ${isActive('/terms-of-service') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Terms of Service
-                  </Link>
-                  <Link
-                    href="/dmca"
-                    className={`block px-4 py-2 text-sm font-medium ${isActive('/dmca') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    DMCA
-                  </Link>
-                  <Link
-                    href="/contact-us"
-                    className={`block px-4 py-2 text-sm font-medium ${isActive('/contact-us') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Contact Us
-                  </Link>
-                </div>
-              )}
+              <div 
+                className={`pl-4 mt-1 space-y-1 transition-all duration-300 overflow-hidden ${legalDropdownOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                <Link
+                  href="/privacy-policy"
+                  className={`block px-4 py-2 text-sm font-medium ${isActive('/privacy-policy') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/terms-of-service"
+                  className={`block px-4 py-2 text-sm font-medium ${isActive('/terms-of-service') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Terms of Service
+                </Link>
+                <Link
+                  href="/dmca"
+                  className={`block px-4 py-2 text-sm font-medium ${isActive('/dmca') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  DMCA
+                </Link>
+                <Link
+                  href="/contact-us"
+                  className={`block px-4 py-2 text-sm font-medium ${isActive('/contact-us') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Contact Us
+                </Link>
+              </div>
             </div>
             
             {/* Support section - collapsible */}
-            <div className="border-t border-slate-800/50 mt-2 pt-2">
+            <div className="border-t border-slate-800/50 mt-2 pt-2 z-10">
               <button 
-                className="w-full px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-800/50 hover:text-white rounded-md flex items-center justify-between"
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setSupportDropdownOpen(!supportDropdownOpen);
-                }}
+                className="w-full px-4 py-2.5 text-sm font-medium text-slate-300 hover:bg-slate-800/50 hover:text-white rounded-md flex items-center justify-between cursor-pointer"
+                onClick={() => setSupportDropdownOpen(!supportDropdownOpen)}
               >
                 <span>Support</span>
                 <ChevronDownIcon 
@@ -289,38 +281,38 @@ export default function Navbar() {
                 />
               </button>
               
-              {supportDropdownOpen && (
-                <div className="pl-4 mt-1 space-y-1">
-                  <Link
-                    href="/help-center"
-                    className={`block px-4 py-2 text-sm font-medium ${isActive('/help-center') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Help Center
-                  </Link>
-                  <Link
-                    href="/community"
-                    className={`block px-4 py-2 text-sm font-medium ${isActive('/community') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Community
-                  </Link>
-                  <Link
-                    href="/feedback"
-                    className={`block px-4 py-2 text-sm font-medium ${isActive('/feedback') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Feedback
-                  </Link>
-                  <Link
-                    href="/report-bug"
-                    className={`block px-4 py-2 text-sm font-medium ${isActive('/report-bug') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    Report Bug
-                  </Link>
-                </div>
-              )}
+              <div 
+                className={`pl-4 mt-1 space-y-1 transition-all duration-300 overflow-hidden ${supportDropdownOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0'}`}
+              >
+                <Link
+                  href="/help-center"
+                  className={`block px-4 py-2 text-sm font-medium ${isActive('/help-center') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Help Center
+                </Link>
+                <Link
+                  href="/community"
+                  className={`block px-4 py-2 text-sm font-medium ${isActive('/community') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Community
+                </Link>
+                <Link
+                  href="/feedback"
+                  className={`block px-4 py-2 text-sm font-medium ${isActive('/feedback') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Feedback
+                </Link>
+                <Link
+                  href="/report-bug"
+                  className={`block px-4 py-2 text-sm font-medium ${isActive('/report-bug') ? 'text-white bg-slate-800/50' : 'text-slate-300'} hover:bg-slate-800/50 hover:text-white rounded-md`}
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  Report Bug
+                </Link>
+              </div>
             </div>
             
             <div className="border-t border-slate-800/50 mt-3 pt-3 pb-1">
